@@ -1,21 +1,19 @@
 
-configuration: Release
 os: Visual Studio 2015
-
-environment:
-  matrix:
-  - platform: X86
-    compiler: "Visual Studio 14 2015"
-  - platform: X64
-    compiler: "Visual Studio 14 2015 Win64"
 
 install:
   - curl http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz -o llvm.tar.xz
   - 7z x llvm.tar.xz
   - 7z x llvm.tar -ollvm
 build_script:
-  - cd llvm\llvm-5.0.0.src && mkdir build && cd build
-  - cmake .. -G "%compiler%" -DLLVM_TARGETS_TO_BUILD=%platform% -DLLVM_BUILD_TESTS=Off -DCMAKE_INSTALL_PREFIX="./llvm"
+  - cd llvm\llvm-5.0.0.src\
+  - mkdir build-x86-release && cd build-x86-release
+  - cmake .. -G "Visual Studio 14 2015" -DLLVM_TARGETS_TO_BUILD=x86 -DLLVM_BUILD_TESTS=Off -DCMAKE_INSTALL_PREFIX="./llvm"
+  - cmake --build .
+  - cmake --build . --target install
+  - cd ..\
+  - mkdir build-x64-release && cd build-x64-release
+  - cmake .. -G "Visual Studio 14 2015 Win64" -DLLVM_TARGETS_TO_BUILD=x64 -DLLVM_BUILD_TESTS=Off -DCMAKE_INSTALL_PREFIX="./llvm"
   - cmake --build .
   - cmake --build . --target install
 
