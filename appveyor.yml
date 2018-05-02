@@ -15,7 +15,7 @@ install:
   - 7z x llvm.tar -ollvm
 build_script:
   - cd llvm\llvm-5.0.0.src && mkdir build && cd build
-  - cmake .. -G “%compiler%” -DLLVM_TARGETS_TO_BUILD=%platform% -DLLVM_BUILD_TESTS=Off -DCMAKE_INSTALL_PREFIX=“./llvm”
+  - cmake .. -G "%compiler%" -DLLVM_TARGETS_TO_BUILD=%platform% -DLLVM_BUILD_TESTS=Off -DCMAKE_INSTALL_PREFIX="./llvm"
   - cmake --build .
   - cmake --build . --target install
 
