@@ -5,25 +5,33 @@ environment:
   - platform: X86
     compiler: "Visual Studio 14 2015"
     configuration: Release
-  - platform: X86
-    compiler: "Visual Studio 14 2015"
-    configuration: Debug
-  - platform: X64
-    compiler: "Visual Studio 14 2015 Win64"
-    configuration: Release
-  - platform: X64
-    compiler: "Visual Studio 14 2015 Win64"
-    configuration: Debug
+  #- platform: X86
+  #  compiler: "Visual Studio 14 2015"
+  #  configuration: Debug
+  #- platform: X64
+  #  compiler: "Visual Studio 14 2015 Win64"
+  #  configuration: Release
+  #- platform: X64
+  #  compiler: "Visual Studio 14 2015 Win64"
+  #  configuration: Debug
 
 install:
   - curl http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz -o llvm.tar.xz
   - 7z x llvm.tar.xz
   - 7z x llvm.tar -ollvm
 build_script:
+  - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir llvm\llvm-5.0.0.src\build && cd llvm\llvm-5.0.0.src\build
   - cmake .. -G "%compiler%" -DLLVM_TARGETS_TO_BUILD=%platform% -DLLVM_BUILD_TESTS=Off -DCMAKE_INSTALL_PREFIX="./llvm"
   - cmake --build . --config %configuration%
   - cmake --build . --target install
+after_build:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - cd llvm\llvm-5.0.0.src\build
+  - 7z a llvm-win-%platform%-%configuration%.zip llvm
+  
+artifacts:
+  - path: '*.zip'
 
 notifications:
 
