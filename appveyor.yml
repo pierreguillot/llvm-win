@@ -23,13 +23,13 @@ build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir llvm\llvm-5.0.0.src\build && cd llvm\llvm-5.0.0.src\build
   - cmake .. -G "%compiler%" -DLLVM_TARGETS_TO_BUILD=%platform% -DLLVM_BUILD_TESTS=Off -DCMAKE_INSTALL_PREFIX="./llvm"
-  - cmake --build . --config %configuration%
+  - msbuild LLVM.sln /nologo /verbosity:quiet /property:Configuration=%configuration% /m
   - cmake --build . --target install
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - cd llvm\llvm-5.0.0.src\build
   - 7z a llvm-win-%platform%-%configuration%.zip llvm
-  
+
 artifacts:
   - path: '*.zip'
 
